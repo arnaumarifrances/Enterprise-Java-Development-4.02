@@ -1,9 +1,9 @@
-package com.example.school.controller;
+package com.example.demo.controller;
 
 import com.example.school.model.Course;
 import com.example.school.model.Student;
 import com.example.school.model.Teacher;
-import com.example.school.service.SchoolService;
+import com.example.demo.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

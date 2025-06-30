@@ -1,11 +1,11 @@
-package com.example.school.service;
+package com.example.demo.service;
 
 import com.example.school.model.Student;
 import com.example.school.model.Course;
 import com.example.school.model.Teacher;
-import com.example.school.repository.StudentRepository;
-import com.example.school.repository.CourseRepository;
-import com.example.school.repository.TeacherRepository;
+import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.CourseRepository;
+import com.example.demo.repository.TeacherRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

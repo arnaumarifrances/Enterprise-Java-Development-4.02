@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.school.model.Course;
-import com.example.school.model.Student;
-import com.example.school.model.Teacher;
+import com.example.demo.model.Course;
+import com.example.demo.model.Student;
+import com.example.demo.model.Teacher;
 import com.example.demo.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

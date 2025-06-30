@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.school.model.Student;
-import com.example.school.model.Course;
-import com.example.school.model.Teacher;
+import com.example.demo.model.Student;
+import com.example.demo.model.Course;
+import com.example.demo.model.Teacher;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.TeacherRepository;

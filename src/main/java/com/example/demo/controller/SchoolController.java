@@ -12,73 +12,89 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class SchoolController {
 
+    private final SchoolService schoolService;
+
     @Autowired
-    private SchoolService schoolService;
+    public SchoolController(SchoolService schoolService) {
+        this.schoolService = schoolService;
+    }
 
     // ENROLL [STUDENT_ID] [COURSE_ID]
     @PostMapping("/enroll/{studentId}/{courseId}")
-    public ResponseEntity<String> enrollStudent(@PathVariable String studentId, @PathVariable String courseId) {
+    public ResponseEntity<String> enrollStudent(@PathVariable String studentId,
+                                                @PathVariable String courseId) {
         try {
             schoolService.enrollStudent(studentId, courseId);
-            return ResponseEntity.ok("Student enrolled successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.ok("Student enrolled successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Enrollment failed: " + e.getMessage());
         }
     }
 
     // ASSIGN [TEACHER_ID] [COURSE_ID]
     @PostMapping("/assign/{teacherId}/{courseId}")
-    public ResponseEntity<String> assignTeacher(@PathVariable String teacherId, @PathVariable String courseId) {
+    public ResponseEntity<String> assignTeacher(@PathVariable String teacherId,
+                                                @PathVariable String courseId) {
         try {
             schoolService.assignTeacher(teacherId, courseId);
-            return ResponseEntity.ok("Teacher assigned successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.ok("Teacher assigned successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Assignment failed: " + e.getMessage());
         }
     }
 
     // SHOW COURSES
     @GetMapping("/courses")
-    public List<Course> getAllCourses() {
-        return schoolService.getAllCourses();
+    public ResponseEntity<List<Course>> getAllCourses() {
+        return ResponseEntity.ok(schoolService.getAllCourses());
     }
 
     // LOOKUP COURSE [COURSE_ID]
     @GetMapping("/courses/{courseId}")
     public ResponseEntity<Course> getCourse(@PathVariable String courseId) {
-        return schoolService.getCourseById(courseId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Course course = schoolService.getCourseById(courseId);
+        if (course != null) {
+            return ResponseEntity.ok(course);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // SHOW STUDENTS
     @GetMapping("/students")
-    public List<Student> getAllStudents() {
-        return schoolService.getAllStudents();
+    public ResponseEntity<List<Student>> getAllStudents() {
+        return ResponseEntity.ok(schoolService.getAllStudents());
     }
 
     // LOOKUP STUDENT [STUDENT_ID]
     @GetMapping("/students/{studentId}")
     public ResponseEntity<Student> getStudent(@PathVariable String studentId) {
-        return schoolService.getStudentById(studentId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Student student = schoolService.getStudentById(studentId);
+        if (student != null) {
+            return ResponseEntity.ok(student);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // SHOW TEACHERS
     @GetMapping("/teachers")
-    public List<Teacher> getAllTeachers() {
-        return schoolService.getAllTeachers();
+    public ResponseEntity<List<Teacher>> getAllTeachers() {
+        return ResponseEntity.ok(schoolService.getAllTeachers());
     }
 
     // LOOKUP TEACHER [TEACHER_ID]
     @GetMapping("/teachers/{teacherId}")
     public ResponseEntity<Teacher> getTeacher(@PathVariable String teacherId) {
-        return schoolService.getTeacherById(teacherId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Teacher teacher = schoolService.getTeacherById(teacherId);
+        if (teacher != null) {
+            return ResponseEntity.ok(teacher);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // SHOW PROFIT

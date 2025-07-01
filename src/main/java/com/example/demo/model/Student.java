@@ -1,62 +1,44 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.UUID;
 
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
-    private final String studentId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String studentId;
+
     private String name;
+
     private String address;
+
     private String email;
+
+    @ManyToOne
     private Course course;
 
-    // Constructor
+    @PrePersist
+    private void generateStudentId() {
+        if (studentId == null || studentId.isEmpty()) {
+            this.studentId = "S-" + UUID.randomUUID();
+        }
+    }
+
     public Student(String name, String address, String email) {
-        this.studentId = UUID.randomUUID().toString();
         this.name = name;
         this.address = address;
         this.email = email;
-        this.course = null;
     }
 
-    // Getters
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    // Setters
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    // Output to console
     @Override
     public String toString() {
         return "Student{" +

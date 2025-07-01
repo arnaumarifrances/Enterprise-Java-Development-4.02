@@ -1,47 +1,44 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.UUID;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Course {
-    // Static counter to generate unique course IDs
-    private static int idCounter = 0;
 
-    // Private attributes
-    private final String courseId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String courseId;
+
     private String name;
-    private double price;
-    private double moneyEarned;
-    private Teacher teacher; // Nullable
 
-    // Constructor that initializes name and price, and auto-generates ID
+    private double price;
+
+    private double moneyEarned;
+
+    @ManyToOne
+    private Teacher teacher;
+
+    @PrePersist
+    private void generateCourseId() {
+        if (courseId == null || courseId.isEmpty()) {
+            this.courseId = "C-" + UUID.randomUUID();
+        }
+    }
+
     public Course(String name, double price) {
-        this.courseId = "C" + (++idCounter);
         this.setName(name);
         this.setPrice(price);
         this.moneyEarned = 0.0;
-        this.teacher = null;
     }
 
-    // Getters
-    public String getCourseId() {
-        return courseId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public double getMoneyEarned() {
-        return moneyEarned;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    // Setters with validation
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Course name cannot be empty.");
@@ -56,11 +53,6 @@ public class Course {
         this.price = price;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    // Adds income to the course when a student enrolls
     public void addEarnings(double amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Earnings cannot be negative.");
@@ -68,13 +60,14 @@ public class Course {
         this.moneyEarned += amount;
     }
 
-    // Optional: toString method for easy printing
     @Override
     public String toString() {
-        return "Course ID: " + courseId +
-                ", Name: " + name +
-                ", Price: " + price +
-                ", Money Earned: " + moneyEarned +
-                ", Teacher: " + (teacher != null ? teacher.getName() : "None");
+        return "Course{" +
+                "courseId='" + courseId + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", moneyEarned=" + moneyEarned +
+                ", teacher=" + (teacher != null ? teacher.getName() : "None") +
+                '}';
     }
 }

@@ -1,35 +1,37 @@
 package com.example.demo.model;
 
-public class Teacher {
-    // Static counter to generate unique teacher IDs
-    private static int idCounter = 0;
+import jakarta.persistence.*;
+import lombok.*;
+import java.util.UUID;
 
-    // Private attributes
-    private final String teacherId;
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Teacher {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id; // interne DB-ID (technisch)
+
+    private String teacherId; // externe ID für Benutzer (z. B. T-UUID)
+
     private String name;
+
     private double salary;
 
-    // Constructor that initializes name and salary, and auto-generates ID
+    @PrePersist
+    private void generateTeacherId() {
+        if (teacherId == null || teacherId.isEmpty()) {
+            this.teacherId = "T-" + UUID.randomUUID().toString();
+        }
+    }
+
     public Teacher(String name, double salary) {
-        this.teacherId = "T" + (++idCounter);
         this.setName(name);
         this.setSalary(salary);
     }
 
-    // Getters
-    public String getTeacherId() {
-        return teacherId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-
-    // Setter for name with validation
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty.");
@@ -37,17 +39,10 @@ public class Teacher {
         this.name = name;
     }
 
-    // Setter for salary with validation
     public void setSalary(double salary) {
         if (salary < 0) {
             throw new IllegalArgumentException("Salary cannot be negative.");
         }
         this.salary = salary;
-    }
-
-    // Optional: toString method for easy printing
-    @Override
-    public String toString() {
-        return "Teacher ID: " + teacherId + ", Name: " + name + ", Salary: " + salary;
     }
 }

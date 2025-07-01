@@ -35,7 +35,7 @@ public class SchoolService {
         }
 
         student.setCourse(course);
-        course.setMoneyEarned(course.getMoneyEarned() + course.getPrice());
+        course.addEarnings(course.getPrice());
 
         studentRepo.save(student);
         courseRepo.save(course);
@@ -86,7 +86,7 @@ public class SchoolService {
     }
 
     // SHOW PROFIT
-    public double getProfit() {
+    public double calculateProfit() {
         double totalEarned = courseRepo.findAll().stream()
                 .mapToDouble(Course::getMoneyEarned)
                 .sum();

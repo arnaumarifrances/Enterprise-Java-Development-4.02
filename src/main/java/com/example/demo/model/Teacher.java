@@ -12,9 +12,9 @@ public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // interne DB-ID (technisch)
+    private Integer id;
 
-    private String teacherId; // externe ID für Benutzer (z. B. T-UUID)
+    private String teacherId;
 
     private String name;
 
@@ -23,7 +23,7 @@ public class Teacher {
     @PrePersist
     private void generateTeacherId() {
         if (teacherId == null || teacherId.isEmpty()) {
-            this.teacherId = "T-" + UUID.randomUUID().toString();
+            this.teacherId = "T-" + UUID.randomUUID();
         }
     }
 

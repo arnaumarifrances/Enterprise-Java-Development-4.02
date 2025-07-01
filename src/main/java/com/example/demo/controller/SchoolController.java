@@ -22,7 +22,6 @@ public class SchoolController {
         this.schoolService = schoolService;
     }
 
-    // ENROLL [STUDENT_ID] [COURSE_ID]
     @PostMapping("/enroll/{studentId}/{courseId}")
     public ResponseEntity<String> enrollStudent(@PathVariable String studentId,
                                                 @PathVariable String courseId) {
@@ -34,7 +33,6 @@ public class SchoolController {
         }
     }
 
-    // ASSIGN [TEACHER_ID] [COURSE_ID]
     @PostMapping("/assign/{teacherId}/{courseId}")
     public ResponseEntity<String> assignTeacher(@PathVariable String teacherId,
                                                 @PathVariable String courseId) {
@@ -46,61 +44,41 @@ public class SchoolController {
         }
     }
 
-    // SHOW COURSES
     @GetMapping("/courses")
     public ResponseEntity<List<Course>> getAllCourses() {
         return ResponseEntity.ok(schoolService.getAllCourses());
     }
 
-    // LOOKUP COURSE [COURSE_ID]
     @GetMapping("/courses/{courseId}")
     public ResponseEntity<Course> getCourse(@PathVariable String courseId) {
         Course course = schoolService.getCourseById(courseId);
-        if (course != null) {
-            return ResponseEntity.ok(course);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return (course != null) ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();
     }
 
-    // SHOW STUDENTS
     @GetMapping("/students")
     public ResponseEntity<List<Student>> getAllStudents() {
         return ResponseEntity.ok(schoolService.getAllStudents());
     }
 
-    // LOOKUP STUDENT [STUDENT_ID]
     @GetMapping("/students/{studentId}")
     public ResponseEntity<Student> getStudent(@PathVariable String studentId) {
         Student student = schoolService.getStudentById(studentId);
-        if (student != null) {
-            return ResponseEntity.ok(student);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return (student != null) ? ResponseEntity.ok(student) : ResponseEntity.notFound().build();
     }
 
-    // SHOW TEACHERS
     @GetMapping("/teachers")
     public ResponseEntity<List<Teacher>> getAllTeachers() {
         return ResponseEntity.ok(schoolService.getAllTeachers());
     }
 
-    // LOOKUP TEACHER [TEACHER_ID]
     @GetMapping("/teachers/{teacherId}")
     public ResponseEntity<Teacher> getTeacher(@PathVariable String teacherId) {
         Teacher teacher = schoolService.getTeacherById(teacherId);
-        if (teacher != null) {
-            return ResponseEntity.ok(teacher);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return (teacher != null) ? ResponseEntity.ok(teacher) : ResponseEntity.notFound().build();
     }
 
-    // SHOW PROFIT
     @GetMapping("/profit")
     public ResponseEntity<Double> getProfit() {
-        double profit = schoolService.calculateProfit();
-        return ResponseEntity.ok(profit);
+        return ResponseEntity.ok(schoolService.calculateProfit());
     }
 }

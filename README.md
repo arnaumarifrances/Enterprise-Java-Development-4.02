@@ -1,4 +1,4 @@
-# IronSchool - School Management System
+# IronSchool - grupo2
 
 IronSchool es una aplicación de consola construida con Spring Boot que permite gestionar estudiantes, profesores y cursos. Está diseñada para simular un sistema básico de gestión escolar con persistencia en base de datos y una interfaz de comandos.
 
@@ -56,13 +56,14 @@ IronSchool es una aplicación de consola construida con Spring Boot que permite 
 ## 🧪 Testing
 
 - `SchoolServiceTest.java` cubre la lógica de negocio clave.
-- Se utilizan mocks para pruebas unitarias.
+- `ConsoleAppTest.java` prueba la consola con simulación de entradas.
+- Se utilizan mocks con Mockito para pruebas unitarias.
 
 ---
 
 ## 🧑 Autor
 
-Proyecto desarrollado por [Tu Nombre] como parte del Homework 2 del bootcamp Ironhack.
+Proyecto desarrollado por Lluc, Franzkiska y Arnau como parte del Homework 2 del bootcamp.
 
 ---
 

@@ -21,37 +21,82 @@ public class ConsoleApp implements CommandLineRunner {
         Scanner sc = new Scanner(System.in);
         System.out.println("=== Welcome to IronSchool Console ===");
 
-        // Paso 1: nombre de la escuela
-        System.out.print("Enter the name of the school: ");
-        String schoolName = sc.nextLine();
-        System.out.println("School: " + schoolName);
+        while (true) {
+            System.out.println("\nPlease choose an option:");
+            System.out.println("1 - View existing data");
+            System.out.println("2 - Add new teacher");
+            System.out.println("3 - Add new course");
+            System.out.println("4 - Add new student");
+            System.out.println("5 - Enter command mode");
+            System.out.println("0 - Exit");
 
-        // Paso 2: crear profesores
+            System.out.print("> ");
+            String option = sc.nextLine().trim();
+
+            switch (option) {
+                case "1":
+                    viewAllData();
+                    break;
+                case "2":
+                    addTeachers(sc);
+                    break;
+                case "3":
+                    addCourses(sc);
+                    break;
+                case "4":
+                    addStudents(sc);
+                    break;
+                case "5":
+                    commandLoop(sc);
+                    break;
+                case "0":
+                    System.out.println("Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    private void viewAllData() {
+        System.out.println("\n=== Teachers ===");
+        service.getAllTeachers().forEach(System.out::println);
+
+        System.out.println("\n=== Courses ===");
+        service.getAllCourses().forEach(System.out::println);
+
+        System.out.println("\n=== Students ===");
+        service.getAllStudents().forEach(System.out::println);
+    }
+
+    private void addTeachers(Scanner sc) {
         System.out.print("How many teachers to create? ");
-        int numTeachers = Integer.parseInt(sc.nextLine());
-        for (int i = 0; i < numTeachers; i++) {
+        int num = Integer.parseInt(sc.nextLine());
+        for (int i = 0; i < num; i++) {
             System.out.println("Enter teacher " + (i + 1) + " name: ");
             String name = sc.nextLine();
             System.out.println("Enter salary: ");
             double salary = Double.parseDouble(sc.nextLine());
             service.saveTeacher(new Teacher(name, salary));
         }
+    }
 
-        // Paso 3: crear cursos
+    private void addCourses(Scanner sc) {
         System.out.print("How many courses to create? ");
-        int numCourses = Integer.parseInt(sc.nextLine());
-        for (int i = 0; i < numCourses; i++) {
+        int num = Integer.parseInt(sc.nextLine());
+        for (int i = 0; i < num; i++) {
             System.out.println("Enter course " + (i + 1) + " name: ");
             String name = sc.nextLine();
             System.out.println("Enter price: ");
             double price = Double.parseDouble(sc.nextLine());
             service.saveCourse(new Course(name, price));
         }
+    }
 
-        // Paso 4: crear estudiantes
+    private void addStudents(Scanner sc) {
         System.out.print("How many students to create? ");
-        int numStudents = Integer.parseInt(sc.nextLine());
-        for (int i = 0; i < numStudents; i++) {
+        int num = Integer.parseInt(sc.nextLine());
+        for (int i = 0; i < num; i++) {
             System.out.println("Enter student " + (i + 1) + " name: ");
             String name = sc.nextLine();
             System.out.println("Enter address: ");
@@ -60,9 +105,11 @@ public class ConsoleApp implements CommandLineRunner {
             String email = sc.nextLine();
             service.saveStudent(new Student(name, address, email));
         }
+    }
 
-        // Paso 5: bucle de comandos
-        System.out.println("You can now enter commands.");
+    private void commandLoop(Scanner sc) {
+        System.out.println("Enter commands (ENROLL, ASSIGN, SHOW, LOOKUP, EXIT):");
+
         while (true) {
             System.out.print("> ");
             String input = sc.nextLine().trim();
@@ -113,7 +160,7 @@ public class ConsoleApp implements CommandLineRunner {
                         }
                         break;
                     case "EXIT":
-                        System.out.println("Goodbye!");
+                        System.out.println("Exiting command mode.");
                         return;
                     default:
                         System.out.println("Unknown command.");

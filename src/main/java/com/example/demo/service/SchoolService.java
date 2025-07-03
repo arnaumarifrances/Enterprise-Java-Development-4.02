@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Student;
 import com.example.demo.model.Course;
+import com.example.demo.model.Student;
 import com.example.demo.model.Teacher;
-import com.example.demo.repository.StudentRepository;
 import com.example.demo.repository.CourseRepository;
+import com.example.demo.repository.StudentRepository;
 import com.example.demo.repository.TeacherRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,21 +17,23 @@ public class SchoolService {
     private final CourseRepository courseRepo;
     private final TeacherRepository teacherRepo;
 
-    public SchoolService(StudentRepository studentRepo, CourseRepository courseRepo, TeacherRepository teacherRepo) {
+    public SchoolService(StudentRepository studentRepo,
+                         CourseRepository courseRepo,
+                         TeacherRepository teacherRepo) {
         this.studentRepo = studentRepo;
         this.courseRepo = courseRepo;
         this.teacherRepo = teacherRepo;
     }
 
-    // ENROLL [STUDENT_ID] [COURSE_ID]
     public void enrollStudent(String studentId, String courseId) {
-        Student student = studentRepo.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
-        Course course = courseRepo.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("Course not found: " + courseId));
+        Student student = studentRepo.findByStudentId(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+
+        Course course = courseRepo.findByCourseId(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
 
         if (student.getCourse() != null) {
-            throw new IllegalStateException("Student is already enrolled in a course.");
+            throw new IllegalStateException("Student already enrolled");
         }
 
         student.setCourse(course);
@@ -41,60 +43,66 @@ public class SchoolService {
         courseRepo.save(course);
     }
 
-    // ASSIGN [TEACHER_ID] [COURSE_ID]
     public void assignTeacher(String teacherId, String courseId) {
-        Teacher teacher = teacherRepo.findById(teacherId)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher not found: " + teacherId));
-        Course course = courseRepo.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("Course not found: " + courseId));
+        Teacher teacher = teacherRepo.findByTeacherId(teacherId)
+                .orElseThrow(() -> new IllegalArgumentException("Teacher not found"));
+
+        Course course = courseRepo.findByCourseId(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
 
         course.setTeacher(teacher);
         courseRepo.save(course);
     }
 
-    // SHOW COURSES
+    public double calculateProfit() {
+        double totalEarnings = courseRepo.findAll()
+                .stream()
+                .mapToDouble(Course::getMoneyEarned)
+                .sum();
+
+        double totalSalaries = teacherRepo.findAll()
+                .stream()
+                .mapToDouble(Teacher::getSalary)
+                .sum();
+
+        return totalEarnings - totalSalaries;
+    }
+
     public List<Course> getAllCourses() {
         return courseRepo.findAll();
     }
 
-    // LOOKUP COURSE [COURSE_ID]
     public Course getCourseById(String courseId) {
-        return courseRepo.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("Course not found: " + courseId));
+        return courseRepo.findByCourseId(courseId).orElse(null);
     }
 
-    // SHOW STUDENTS
     public List<Student> getAllStudents() {
         return studentRepo.findAll();
     }
 
-    // LOOKUP STUDENT [STUDENT_ID]
     public Student getStudentById(String studentId) {
-        return studentRepo.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
+        return studentRepo.findByStudentId(studentId).orElse(null);
     }
 
-    // SHOW TEACHERS
     public List<Teacher> getAllTeachers() {
         return teacherRepo.findAll();
     }
 
-    // LOOKUP TEACHER [TEACHER_ID]
     public Teacher getTeacherById(String teacherId) {
-        return teacherRepo.findById(teacherId)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher not found: " + teacherId));
+        return teacherRepo.findByTeacherId(teacherId).orElse(null);
     }
 
-    // SHOW PROFIT
-    public double calculateProfit() {
-        double totalEarned = courseRepo.findAll().stream()
-                .mapToDouble(Course::getMoneyEarned)
-                .sum();
+    // === NUEVOS MÉTODOS ===
 
-        double totalSalaries = teacherRepo.findAll().stream()
-                .mapToDouble(Teacher::getSalary)
-                .sum();
+    public void saveStudent(Student student) {
+        studentRepo.save(student);
+    }
 
-        return totalEarned - totalSalaries;
+    public void saveCourse(Course course) {
+        courseRepo.save(course);
+    }
+
+    public void saveTeacher(Teacher teacher) {
+        teacherRepo.save(teacher);
     }
 }

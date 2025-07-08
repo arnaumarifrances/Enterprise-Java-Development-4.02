@@ -1,73 +1,66 @@
-# IronSchool - grupo2
+# Enterprise-Java-Development-4.02
 
-IronSchool es una aplicación de consola construida con Spring Boot que permite gestionar estudiantes, profesores y cursos. Está diseñada para simular un sistema básico de gestión escolar con persistencia en base de datos y una interfaz de comandos.
+## Descripción del Proyecto
 
-## 🛠️ Tecnologías usadas
+Este proyecto consiste en desarrollar una API REST en Java utilizando Spring Boot para manejar la información de médicos y pacientes de un hospital multi-ciudad. El proyecto utiliza una base de datos MySQL para almacenar la información.
 
-- Java 17+
-- Spring Boot 3.5+
-- Spring Data JPA
-- MySQL
-- Lombok
-- JUnit 5
-- IntelliJ IDEA
+## Requisitos
 
----
+### Base de Datos
 
-## 🚀 ¿Cómo ejecutar?
+Se deben crear dos tablas en la base de datos:
 
-1. Asegúrate de tener MySQL corriendo (puerto 3314, base de datos `demo`).
-2. Clona el proyecto.
-3. Abre en IntelliJ.
-4. Ejecuta `DemoApplication.java` para lanzar la consola.
-5. Interactúa con comandos desde la terminal integrada.
+#### Tabla `Employee` (Médicos):
 
----
+| employee_id | department    | name              | status  |
+|-------------|--------------|-------------------|---------|
+| 356712      | cardiology   | Alonso Flores     | ON_CALL |
+| 564134      | immunology   | Sam Ortega        | ON      |
+| 761527      | cardiology   | German Ruiz       | OFF     |
+| 166552      | pulmonary     | Maria Lin         | ON      |
+| 156545      | orthopaedic  | Paolo Rodriguez   | ON_CALL |
+| 172456      | psychiatric  | John Paul Armes   | OFF     |
 
-## 📦 Comandos disponibles
+#### Tabla `Patient` (Pacientes):
 
-### 🎓 Estudiantes
+| patient_id | name            | date_of_birth | admitted_by |
+|------------|-----------------|---------------|-------------|
+| 1          | Jaime Jordan    | 1984-03-02    | 564134      |
+| 2          | Marian Garcia   | 1972-01-12    | 564134      |
+| 3          | Julia Dusterdieck | 1954-06-11  | 356712      |
+| 4          | Steve McDuck    | 1931-11-10    | 761527      |
+| 5          | Marian Garcia   | 1999-02-15    | 172456      |
 
-- `SHOW STUDENTS` — Lista todos los estudiantes.
-- `LOOKUP STUDENT [STUDENT_ID]` — Muestra los detalles de un estudiante.
-- `ENROLL [STUDENT_ID] [COURSE_ID]` — Inscribe a un estudiante en un curso.
+### Especificaciones
 
-### 🧑‍🏫 Profesores
+Debes crear rutas REST que permitan obtener la siguiente información:
 
-- `SHOW TEACHERS` — Lista todos los profesores.
-- `LOOKUP TEACHER [TEACHER_ID]` — Muestra los detalles de un profesor.
-- `ASSIGN [TEACHER_ID] [COURSE_ID]` — Asigna un profesor a un curso.
+1. **Obtener todos los médicos**: Crear una ruta que devuelva todos los médicos.
+2. **Obtener un médico por ID**: Crear una ruta que devuelva un médico por `employee_id`.
+3. **Obtener médicos por estado**: Crear una ruta que devuelva los médicos por su estado (ON, OFF, ON_CALL).
+4. **Obtener médicos por departamento**: Crear una ruta que devuelva los médicos según su departamento.
+5. **Obtener todos los pacientes**: Crear una ruta que devuelva todos los pacientes.
+6. **Obtener un paciente por ID**: Crear una ruta que devuelva un paciente por `patient_id`.
+7. **Obtener pacientes por rango de fecha de nacimiento**: Crear una ruta que devuelva los pacientes nacidos dentro de un rango de fechas.
+8. **Obtener pacientes por departamento del médico que los atendió**: Crear una ruta que devuelva los pacientes cuyo médico pertenece a un departamento específico.
+9. **Obtener todos los pacientes con un médico cuyo estado sea OFF**: Crear una ruta que devuelva todos los pacientes cuyo médico tiene el estado "OFF".
 
-### 📘 Cursos
+## Configuración de la Base de Datos
 
-- `SHOW COURSES` — Lista todos los cursos.
-- `LOOKUP COURSE [COURSE_ID]` — Muestra los detalles de un curso.
+### `application.properties`
 
-### 📈 Finanzas
+La conexión a la base de datos se configura en el archivo `application.properties` de la siguiente manera:
 
-- `SHOW PROFIT` — Calcula el beneficio neto: ingresos por cursos - salarios.
+```properties
+spring.application.name=demo
 
-### ❌ Salida
+# Configuración de la conexión a la base de datos MySQL
+spring.datasource.url=jdbc:mysql://localhost:3314/demo?createDatabaseIfNotExist=true&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=Ironhack
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
-- `EXIT` — Cierra la aplicación.
-
----
-
-## 🧪 Testing
-
-- `SchoolServiceTest.java` cubre la lógica de negocio clave.
-- `ConsoleAppTest.java` prueba la consola con simulación de entradas.
-- Se utilizan mocks con Mockito para pruebas unitarias.
-
----
-
-## 🧑 Autor
-
-Proyecto desarrollado por Lluc, Franzkiska y Arnau como parte del Homework 2 del bootcamp.
-
----
-
-## 📎 Notas
-
-- Los IDs (`S-uuid`, `T-uuid`, `C-uuid`) se generan automáticamente.
-- El sistema maneja errores y evita inscripciones repetidas.
+# Configuración de Hibernate
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=true
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect

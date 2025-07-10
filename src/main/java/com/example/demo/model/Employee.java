@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 public class Employee {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Esto permite que Hibernate genere el ID automáticamente
     private Long id;
 
     private String name;

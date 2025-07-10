@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public class Patient {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Esto permite que Hibernate genere el ID automáticamente
     private Long id;
 
     private String name;
@@ -18,8 +19,7 @@ public class Patient {
 
     public Patient() {}
 
-    public Patient(Long id, String name, LocalDate dateOfBirth, Employee admittedBy) {
-        this.id = id;
+    public Patient(String name, LocalDate dateOfBirth, Employee admittedBy) {
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.admittedBy = admittedBy;
